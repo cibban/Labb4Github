@@ -10,11 +10,18 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("Testing Toll Fee Calculator")
 public class TollFeeCalcTests {
 
+    @Test
+    @DisplayName("Testing that the unit class is not instantiated with parameters.")
+    public void testMethodNotInstance() {
+        TollFeeCalculator test = new TollFeeCalculator("./testData/empty.txt");
+        // Throws exception if old method is used.
+    }
+
 
     @Test
     @DisplayName("Testing that all dates are read.")
-    void testReadInputFileCorrectly() {
-            TollFeeCalculator.tollFeeCalculator("./testData/lengthTest.txt");
+    void testReadAllDatesInFile() {
+            TollFeeCalculator.calculateTollFee("./testData/lengthTest.txt");
 //        File has only one date. Test throws exception if reading fewer.
     }
 
@@ -55,7 +62,7 @@ public class TollFeeCalcTests {
     }
 
     @Test
-    @DisplayName("Testing that the 60 kr max price works.")
+    @DisplayName("Testing that the 60 kr max price is invoked when it should.")
     void testMaxPrice() {
         LocalDateTime[] datesMoreThanMax = new LocalDateTime[4];
         datesMoreThanMax[0] = LocalDateTime.of(2020, 10, 1, 6, 30);
@@ -64,6 +71,11 @@ public class TollFeeCalcTests {
         datesMoreThanMax[3] = LocalDateTime.of(2020, 10, 1, 16, 12);
 
         assertEquals(60, TollFeeCalculator.getTotalFeeCost(datesMoreThanMax));
+    }
+
+    @Test
+    @DisplayName("Testing that the 60 kr max price is not invoked when it shouldn't.")
+    void testNotMaxPrice() {
 
         LocalDateTime[] datesLessThanMax = new LocalDateTime[4];
         datesLessThanMax[0] = LocalDateTime.of(2020, 10, 1, 6, 0);

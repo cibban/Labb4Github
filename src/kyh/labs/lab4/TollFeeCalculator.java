@@ -9,7 +9,11 @@ import java.util.Scanner;
 
 public class TollFeeCalculator {
 
-    public static void tollFeeCalculator(String inputFile) { // -> Metod istället för att instantiera utility-klassen.
+    public TollFeeCalculator(String inputFile) {
+        // Dummy constructor to enable test.
+    }
+
+    public static void calculateTollFee(String inputFile) { // -> Metod istället för att instantiera klassen.
         try {
             Scanner sc = new Scanner(new File(inputFile));
             String[] dateStrings = sc.nextLine().split(", ");
@@ -68,6 +72,6 @@ public class TollFeeCalculator {
     }
 
     public static void main(String[] args) {
-        tollFeeCalculator("testData/Lab4.txt");
+        calculateTollFee("testData/Lab4.txt");
     }
 }
