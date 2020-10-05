@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class TollFeeCalculator {
 
-    public TollFeeCalculator(String inputFile) {
+    public static void tollFeeCalculator(String inputFile) { // -> Metod istället för att instantiera utility-klassen.
         try {
             Scanner sc = new Scanner(new File(inputFile));
             String[] dateStrings = sc.nextLine().split(", ");
@@ -18,6 +18,7 @@ public class TollFeeCalculator {
                 dates[i] = LocalDateTime.parse(dateStrings[i], DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
             }
             System.out.println("The total fee for the input file is: " + getTotalFeeCost(dates));
+            sc.close(); //Stäng filen.
         } catch(IOException e) {
             System.err.println("Could not read file " + inputFile);
         }
@@ -26,7 +27,7 @@ public class TollFeeCalculator {
     public static int getTotalFeeCost(LocalDateTime[] dates) {
         int totalFee = 0;
         LocalDateTime intervalStart = dates[0];
-        int intervalMaxFee = 0;
+        int intervalMaxFee = 0; // -> För att inte bara de senaste två värdena ska jämföras.
         long diffInMinutes;
 
         for(int i = 0; i < dates.length; i++) {
@@ -34,31 +35,31 @@ public class TollFeeCalculator {
             diffInMinutes = intervalStart.until(dates[i], ChronoUnit.MINUTES);
 
             if(diffInMinutes > 60) {
-                totalFee += intervalMaxFee;
+                totalFee += intervalMaxFee; // Maxpriset från förra intervallet läggs till totalen innan nästa pris hämtas.
                 totalFee += getTollFeePerPassing(dates[i]);
                 intervalStart = dates[i];
                 intervalMaxFee = 0;
             } else {
                 intervalMaxFee = Math.max(getTollFeePerPassing(dates[i]), getTollFeePerPassing(intervalStart));
-                if(i == dates.length-1) totalFee += intervalMaxFee;
+                if(i == dates.length-1) totalFee += intervalMaxFee; // Maxpriset för intervallet  läggs till totalen om det är sista raden.
             }
         }
-        return Math.min(totalFee, 60);  // Ska vara min istället för max.
+        return Math.min(totalFee, 60);  // -> Min istället för max.
     }
 
     public static int getTollFeePerPassing(LocalDateTime date) {
         if (isTollFreeDate(date)) return 0;
         int hour = date.getHour();
         int minute = date.getMinute();
-        if (hour == 6 && minute <= 29) return 8; // Kontroll >=0 överflödig.
-        else if (hour == 6) return 13; // Kontroll <=59 överflödig.
-        else if (hour == 7) return 18; // Kontroll av minuter överflödig.
-        else if (hour == 8 && minute <= 29) return 13; // Kontroll >=0 överflödig.
-        else if (hour <= 14) return 8; // Kontroll av minuter överflödig.
-        else if (hour == 15 && minute <= 29) return 13; // Kontroll >=0 överflödig.
-        else if (hour == 15 || hour == 16) return 18; // Kontroll av minuter överflödiga eftersom "else"
-        else if (hour == 17) return 13; // Kontroll av minuter överflödig.
-        else if (hour == 18 && minute <= 29) return 8; // Kontroll >=0 överflödig.
+        if (hour == 6 && minute <= 29) return 8;
+        else if (hour == 6) return 13;
+        else if (hour == 7) return 18;
+        else if (hour == 8 && minute <= 29) return 13;
+        else if (hour <= 14) return 8; // -> kolla hela timmar, inte bara de första 30 minuterna.
+        else if (hour == 15 && minute <= 29) return 13;
+        else if (hour == 15 || hour == 16) return 18; // -> ta inte betalt mellan 15 och 15:29.
+        else if (hour == 17) return 13;
+        else if (hour == 18 && minute <= 29) return 8;
         else return 0;
     }
 
@@ -67,6 +68,6 @@ public class TollFeeCalculator {
     }
 
     public static void main(String[] args) {
-        new TollFeeCalculator("testData/Lab4.txt");
+        tollFeeCalculator("testData/Lab4.txt");
     }
 }
