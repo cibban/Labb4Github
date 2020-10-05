@@ -5,11 +5,12 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class TollFeeCalculator {
 
-    public TollFeeCalculator(String inputFile) {
+    TollFeeCalculator() {
         // Dummy constructor to enable test.
     }
 
@@ -25,6 +26,8 @@ public class TollFeeCalculator {
             sc.close(); //Stäng filen.
         } catch(IOException e) {
             System.err.println("Could not read file " + inputFile);
+        } catch(NoSuchElementException elementException) {
+            System.err.println("File " + inputFile + " is empty."); // Hantering av tomma filer fanns inte.
         }
     }
 
@@ -35,6 +38,13 @@ public class TollFeeCalculator {
         long diffInMinutes;
 
         for(int i = 0; i < dates.length; i++) {
+            // Hantering av filer med mer än ett datum.
+            if(!intervalStart.truncatedTo(ChronoUnit.DAYS).equals(dates[i].truncatedTo(ChronoUnit.DAYS))){
+                totalFee += intervalMaxFee; // Maxpriset från förra intervallet läggs till totalen innan man bryter.
+                System.err.println("Warning: File contains more than one date.");
+                break;
+            }
+
             System.out.println(dates[i].toString());
             diffInMinutes = intervalStart.until(dates[i], ChronoUnit.MINUTES);
 
