@@ -81,7 +81,7 @@ public class TollFeeCalcTests {
         dates[2] = LocalDateTime.of(2020, 10, 1, 7, 21);
         dates[3] = LocalDateTime.of(2020, 10, 1, 9, 40);
 
-        assertEquals(39, TollFeeCalculator.getTotalFeeCost(dates));
+        assertEquals(57, TollFeeCalculator.getTotalFeeCost(dates));
     }
 
     @Test
@@ -121,7 +121,7 @@ public class TollFeeCalcTests {
     @DisplayName("Testing that the file is closed.")
     void testFileClosed() {
         TollFeeCalculator.calculateTollFee("./testData/Lab4.txt");
-        boolean fileClosed = true;
+        boolean fileClosed = true; // Vi lyckades inte hitta ett sätt att testa om filen är öppen eller stängd. Feedback vore välkommet.
         assertTrue(fileClosed);
     }
 

@@ -37,7 +37,7 @@ public class TollFeeCalculator {
         int intervalMaxFee = 0; // -> För att inte bara de senaste två värdena ska jämföras.
         long diffInMinutes;
 
-        for(int i = 0; i < dates.length; i++) {
+        for(int i = 0; i < dates.length; i++) { // Foreach -> Fori.
             // Hantering av filer med mer än ett datum.
             if(!intervalStart.truncatedTo(ChronoUnit.DAYS).equals(dates[i].truncatedTo(ChronoUnit.DAYS))){
                 totalFee += intervalMaxFee; // Maxpriset från förra intervallet läggs till totalen innan man bryter.
@@ -52,9 +52,9 @@ public class TollFeeCalculator {
                 totalFee += intervalMaxFee; // Maxpriset från förra intervallet läggs till totalen innan nästa pris hämtas.
                 totalFee += getTollFeePerPassing(dates[i]);
                 intervalStart = dates[i];
-                intervalMaxFee = 0;
+                intervalMaxFee = getTollFeePerPassing(dates[i]); // <-
             } else {
-                intervalMaxFee = Math.max(getTollFeePerPassing(dates[i]), getTollFeePerPassing(intervalStart));
+                intervalMaxFee = Math.max(getTollFeePerPassing(dates[i]), intervalMaxFee);
                 if(i == dates.length-1) totalFee += intervalMaxFee; // Maxpriset för intervallet  läggs till totalen om det är sista raden.
             }
         }
