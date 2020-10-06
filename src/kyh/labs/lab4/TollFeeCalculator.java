@@ -50,9 +50,9 @@ public class TollFeeCalculator {
 
             if(diffInMinutes > 60) {
                 totalFee += intervalMaxFee; // Maxpriset från förra intervallet läggs till totalen innan nästa pris hämtas.
-                totalFee += getTollFeePerPassing(dates[i]);
                 intervalStart = dates[i];
                 intervalMaxFee = getTollFeePerPassing(dates[i]); // <-
+                if(i == dates.length-1) totalFee += intervalMaxFee; // Maxpriset för intervallet  läggs till totalen om det är sista raden.
             } else {
                 intervalMaxFee = Math.max(getTollFeePerPassing(dates[i]), intervalMaxFee);
                 if(i == dates.length-1) totalFee += intervalMaxFee; // Maxpriset för intervallet  läggs till totalen om det är sista raden.

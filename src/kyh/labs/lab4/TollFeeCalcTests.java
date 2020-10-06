@@ -38,9 +38,9 @@ public class TollFeeCalcTests {
     void testBreakOnMutlipleDatesInFile() {
         LocalDateTime[] dates = new LocalDateTime[6];
         dates[0] = LocalDateTime.of(2020, 10, 1, 9, 10);
-        dates[1] = LocalDateTime.of(2020, 10, 1, 10, 11);
-        dates[2] = LocalDateTime.of(2020, 10, 1, 11, 12);
-        dates[3] = LocalDateTime.of(2020, 10, 1, 12, 13);
+        dates[1] = LocalDateTime.of(2020, 10, 1, 10, 12);
+        dates[2] = LocalDateTime.of(2020, 10, 1, 11, 14);
+        dates[3] = LocalDateTime.of(2020, 10, 1, 12, 16);
         dates[4] = LocalDateTime.of(2020, 10, 2, 13, 14);
         dates[5] = LocalDateTime.of(2020, 10, 3, 14, 15);
 
@@ -78,10 +78,10 @@ public class TollFeeCalcTests {
         LocalDateTime[] dates = new LocalDateTime[4];
         dates[0] = LocalDateTime.of(2020, 10, 1, 6, 20);
         dates[1] = LocalDateTime.of(2020, 10, 1, 6, 40);
-        dates[2] = LocalDateTime.of(2020, 10, 1, 7, 21);
+        dates[2] = LocalDateTime.of(2020, 10, 1, 7, 20);
         dates[3] = LocalDateTime.of(2020, 10, 1, 9, 40);
 
-        assertEquals(57, TollFeeCalculator.getTotalFeeCost(dates));
+        assertEquals(26, TollFeeCalculator.getTotalFeeCost(dates));
     }
 
     @Test
